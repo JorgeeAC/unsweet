@@ -1,7 +1,9 @@
-from enum import Enum
-from typing import Literal
-
+"""
+Pydantic models for UNsweet
+"""
 from pydantic import BaseModel, HttpUrl
+from typing import Optional, List
+from enum import Enum
 
 
 class MediaType(str, Enum):
@@ -12,8 +14,8 @@ class MediaType(str, Enum):
 
 
 class ArtistLink(BaseModel):
-    platform: str
-    url: HttpUrl | str
+    platform: str          # "instagram" | "website" | "spotify" etc.
+    url: str
 
 
 class Artist(BaseModel):
@@ -21,12 +23,22 @@ class Artist(BaseModel):
     slug: str
     name: str
     bio: str
-    location: str
-    avatar_url: str | None = None
-    cover_url: str | None = None
-    disciplines: list[str] = []
-    links: list[ArtistLink] = []
+    location: Optional[str] = None
+    avatar_url: Optional[str] = None
+    cover_url: Optional[str] = None
+    links: List[ArtistLink] = []
+    disciplines: List[str] = []   # ["photography", "music", "design"]
     featured: bool = False
+
+
+class ArtistDetail(BaseModel):
+    """Extended artist profile — each artist gets their own layout data"""
+    artist: Artist
+    statement: Optional[str] = None       # Artist statement
+    process_notes: Optional[str] = None   # Behind-the-scenes / process text
+    selected_works: List["Piece"] = []
+    palette: Optional[List[str]] = None   # Hex colours for artist's detail page theme
+    layout_variant: str = "default"       # CMS can set "grid" | "editorial" | "cinematic"
 
 
 class Piece(BaseModel):
@@ -37,43 +49,34 @@ class Piece(BaseModel):
     year: int
     media_type: MediaType
     media_url: str
-    thumbnail_url: str | None = None
-    description: str | None = None
-    tags: list[str] = []
+    thumbnail_url: Optional[str] = None
+    description: Optional[str] = None
+    tags: List[str] = []
     featured: bool = False
 
 
-class ArtistDetail(BaseModel):
-    artist: Artist
-    statement: str | None = None
-    process_notes: str | None = None
-    selected_works: list[Piece] = []
-    palette: list[str] = []
-    layout_variant: Literal["default", "editorial", "cinematic", "grid"] = "default"
-
-
 class Collection(BaseModel):
+    """Shopify collection proxy"""
     id: str
     shopify_collection_id: str
     title: str
-    description: str | None = None
-    cover_url: str | None = None
+    description: Optional[str] = None
+    cover_url: Optional[str] = None
     product_count: int = 0
 
 
-class ProductVariant(BaseModel):
-    id: str
-    title: str
-    available: bool = True
-
-
 class Product(BaseModel):
+    """Shopify product proxy"""
     id: str
     shopify_product_id: str
     title: str
-    description: str | None = None
+    description: Optional[str] = None
     price: str
-    compare_at_price: str | None = None
-    images: list[str] = []
-    variants: list[ProductVariant] = []
-    artist_id: str | None = None
+    compare_at_price: Optional[str] = None
+    images: List[str] = []
+    variants: List[dict] = []
+    available: bool = True
+    artist_id: Optional[str] = None      # Link product back to an artist
+
+
+ArtistDetail.model_rebuild()
