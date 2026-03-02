@@ -2,28 +2,17 @@ import { useParams, Link } from 'react-router-dom'
 import { useFetch } from '../hooks/useFetch'
 import { api } from '../lib/api'
 
-const MOCK = {
-  artist: {
-    id: '1', slug: 'nova-reyes', name: 'Nova Reyes', location: 'Los Angeles, CA',
-    disciplines: ['photography', 'mixed media'],
-    bio: 'Visual artist working at the intersection of diaspora and digital memory. Her practice spans archival photography, digital manipulation, and immersive installation.',
-    links: [{ platform: 'instagram', url: '#' }, { platform: 'website', url: '#' }],
-  },
-  statement: 'My practice is an act of remembering for those who were not allowed to.',
-  process_notes: 'I shoot on film first, then digitally manipulate to introduce artifacts of memory — glitches that become documents.',
-  selected_works: [
-    { id: 'p1', title: 'Between Frequencies', year: 2024, media_type: 'image' },
-    { id: 'p2', title: 'Afterglow Study No. 3', year: 2023, media_type: 'image' },
-    { id: 'p3', title: 'The Weight of Distance', year: 2022, media_type: 'mixed' },
-  ],
-}
-
 export default function ArtistDetail() {
   const { slug } = useParams()
-  const { data, loading } = useFetch(() => api.artist(slug), [slug])
-  const detail = data || MOCK
+  const { data, loading, error } = useFetch(
+    () => (slug ? api.artist(slug) : Promise.resolve(null)),
+    [slug]
+  )
+  const detail = data
 
-  if (loading) return <div className="state-msg">Loading…</div>
+  if (loading) return <div className="state-msg">Loading...</div>
+  if (error) return <div className="state-msg">Could not load creator profile from CMS.</div>
+  if (!detail?.artist) return <div className="state-msg">Creator not found.</div>
 
   const { artist, statement, process_notes, selected_works } = detail
 

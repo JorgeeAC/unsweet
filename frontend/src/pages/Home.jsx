@@ -2,35 +2,27 @@ import { Link } from 'react-router-dom'
 import { useFetch } from '../hooks/useFetch'
 import { api } from '../lib/api'
 
-const MOCK_PIECES = [
-  { id: 'p1', title: 'Between Frequencies', artist: 'Nova Reyes', year: 2024 },
-  { id: 'p2', title: 'Urban Elegy', artist: 'Echo Park', year: 2023 },
-  { id: 'p3', title: 'Soft Resistance', artist: 'Soleil D.', year: 2024 },
-]
-
-const MOCK_ARTISTS = [
-  { id: '1', slug: 'nova-reyes', name: 'Nova Reyes', initials: 'NR', disciplines: ['photography', 'mixed media'] },
-  { id: '2', slug: 'echo-park',  name: 'Echo Park',  initials: 'EP', disciplines: ['sound', 'video'] },
-  { id: '3', slug: 'soleil-d',   name: 'Soleil D.',  initials: 'SD', disciplines: ['textile', 'design'] },
-]
-
 export default function Home() {
-  const { data: artists } = useFetch(() => api.artists(true), [])
-  const { data: pieces }  = useFetch(() => api.pieces({ featured: true }), [])
+  const { data: artists, loading: artistsLoading, error: artistsError } = useFetch(
+    () => api.artists(true),
+    []
+  )
+  const { data: pieces, loading: piecesLoading, error: piecesError } = useFetch(
+    () => api.pieces({ featured: true }),
+    []
+  )
 
-  const displayArtists = artists || MOCK_ARTISTS
-  const displayPieces  = pieces  || MOCK_PIECES
+  const displayArtists = Array.isArray(artists) ? artists : []
+  const displayPieces = Array.isArray(pieces) ? pieces : []
+  const artistNameById = new Map(displayArtists.map((artist) => [artist.id, artist.name]))
 
   return (
     <main>
-
-      {/* ── Hero ── */}
       <section className="hero">
         <div className="hero-grid" />
         <div className="hero-vignette" />
 
         <div className="hero-content">
-
           <div className="hero-wordmark">
             <svg
               viewBox="0 0 700 110"
@@ -52,14 +44,12 @@ export default function Home() {
             </svg>
           </div>
 
-          <p className="hero-tagline">
-            We're building something.
-          </p>
+          <p className="hero-tagline">We're building something.</p>
 
           <div className="hero-ctas">
-            {/* 
-             <Link to="/creators" className="btn-primary">Meet the creators</Link>
-            <Link to="/collections" className="btn-secondary">Shop the drop</Link> 
+            {/*
+            <Link to="/creators" className="btn-primary">Meet the creators</Link>
+            <Link to="/collections" className="btn-secondary">Shop the drop</Link>
             */}
           </div>
         </div>
@@ -70,49 +60,73 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Selected Works ── */}
       <section className="section">
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Selected Works</h2>
             <Link to="/creators" className="see-all">View all →</Link>
           </div>
-          <div className="works-grid">
-            {displayPieces.map(piece => (
-              <article key={piece.id} className="work-card">
-                <div className="work-thumb">{piece.title}</div>
-                <div>
-                  <p className="work-title">{piece.title}</p>
-                  <p className="work-sub">{piece.artist || piece.artist_id} · {piece.year}</p>
-                </div>
-              </article>
-            ))}
-          </div>
+
+          {piecesLoading && <p className="state-msg">Loading featured works...</p>}
+          {piecesError && <p className="state-msg">Could not load featured works.</p>}
+
+          {!piecesLoading && !piecesError && displayPieces.length > 0 && (
+            <div className="works-grid">
+              {displayPieces.map((piece) => (
+                <article key={piece.id} className="work-card">
+                  <div className="work-thumb">{piece.title}</div>
+                  <div>
+                    <p className="work-title">{piece.title}</p>
+                    <p className="work-sub">
+                      {artistNameById.get(piece.artist_id) || piece.artist || piece.artist_id} · {piece.year}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+
+          {!piecesLoading && !piecesError && displayPieces.length === 0 && (
+            <p className="state-msg">No featured works found.</p>
+          )}
         </div>
       </section>
 
-      {/* ── The Collective ── */}
       <section className="section">
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">The Collective</h2>
             <Link to="/creators" className="see-all">All creators →</Link>
           </div>
-          <div className="artist-strip">
-            {displayArtists.map(artist => (
-              <Link key={artist.id} to={`/creators/${artist.slug}`} className="artist-card-home">
-                <div className="artist-avatar-home">
-                  {artist.initials || artist.name?.slice(0, 2)}
-                </div>
-                <p className="artist-name-home">{artist.name}</p>
-                <p className="artist-disc-home">{(artist.disciplines || []).join(' · ')}</p>
-              </Link>
-            ))}
-          </div>
+
+          {artistsLoading && <p className="state-msg">Loading creators...</p>}
+          {artistsError && <p className="state-msg">Could not load creators.</p>}
+
+          {!artistsLoading && !artistsError && displayArtists.length > 0 && (
+            <div className="artist-strip">
+              {displayArtists.map((artist) => (
+                <Link key={artist.id} to={`/creators/${artist.slug}`} className="artist-card-home">
+                  <div className="artist-avatar-home">
+                    {artist.name
+                      ?.split(' ')
+                      .slice(0, 2)
+                      .map((part) => part[0])
+                      .join('')
+                      .toUpperCase()}
+                  </div>
+                  <p className="artist-name-home">{artist.name}</p>
+                  <p className="artist-disc-home">{(artist.disciplines || []).join(' · ')}</p>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {!artistsLoading && !artistsError && displayArtists.length === 0 && (
+            <p className="state-msg">No creators found.</p>
+          )}
         </div>
       </section>
 
-      {/* ── Drop Banner ── */}
       <section className="section">
         <div className="container">
           <div className="shop-banner">
@@ -128,7 +142,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
     </main>
   )
 }
+

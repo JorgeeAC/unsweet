@@ -17,7 +17,14 @@ async function request(path, options = {}) {
 export const api = {
   health: () => fetch('/health').then((res) => res.json()),
 
-  artists: () => request('/cms/artists'),
+  artists: (featured = null) => {
+    const search = new URLSearchParams()
+    if (featured !== null && featured !== undefined) {
+      search.set('featured', String(featured))
+    }
+    const query = search.toString() ? `?${search.toString()}` : ''
+    return request(`/cms/artists${query}`)
+  },
   artist: (slug) => request(`/cms/artists/${slug}`),
   pieces: (params = {}) => {
     const search = new URLSearchParams(params)
