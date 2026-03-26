@@ -1,7 +1,7 @@
 """
-CMS Router — content is fetched/managed here.
-In production, swap the mock data with your headless CMS client
-(Sanity, Contentful, Strapi, etc.)
+CMS router — FastAPI sidecar scope.
+Owns: artists, pieces, editorial content, brand config.
+Does NOT own: products, collections, cart, orders, inventory (Shopify).
 """
 from fastapi import APIRouter, HTTPException
 from models import Artist, ArtistDetail, Piece, ArtistLink, MediaType

@@ -5,16 +5,20 @@ Concerns are separated:
   - /api/shop   → Shopify proxy / commerce layer
 """
 
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api import cms_router, shop_router
 
 app = FastAPI(title="UNsweet API", version="0.1.0")
 
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://unsweet.co"],
-    allow_credentials=True,
+    allow_origins=allowed_origins,
+    allow_credentials=True,  # TODO: set via env once session strategy is confirmed
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -20,13 +20,17 @@ const MOCK_PRODUCTS = [
 
 export default function Collections() {
   const [activeTab, setActiveTab] = useState(null)
+  // TODO: reroute to Shopify Storefront API
   const { data: collections } = useFetch(() => api.collections(),[])
+  // TODO: reroute to Shopify Storefront API
   const { data: products }    = useFetch(() => api.products(activeTab ? { collection_id: activeTab } : {}), [activeTab])
 
 
   const cols  = collections || MOCK_COLLECTIONS
   const prods = products    || MOCK_PRODUCTS
 
+  // TODO [NEXT]: reroute data fetching to Shopify Storefront API via shopifyClient
+  // TODO [LATER]: move this route to Hydrogen storefront
   return (
     <main>
       <div className="container">

@@ -1,4 +1,10 @@
 """
+DEPRECATED ROUTER — do not add new endpoints here.
+FastAPI no longer proxies Shopify Storefront data.
+Frontend calls Shopify Storefront API directly.
+Frozen pending frontend migration.
+"""
+"""
 Shopify Router — acts as a server-side proxy to the Shopify Storefront API.
 This keeps your Shopify credentials server-side and lets you enrich
 products with CMS data (e.g. linking a product to an artist).

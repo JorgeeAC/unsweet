@@ -14,7 +14,7 @@ async function request(path, options = {}) {
   return response.json()
 }
 
-export const api = {
+export const cmsApi = {
   health: () => fetch('/health').then((res) => res.json()),
 
   artists: (featured = null) => {
@@ -31,8 +31,17 @@ export const api = {
     const query = search.toString() ? `?${search.toString()}` : ''
     return request(`/cms/pieces${query}`)
   },
+}
 
+// TODO [NEXT]: replace with Shopify Storefront GraphQL client — do not route through FastAPI
+export const shopifyClient = {}
+
+// Preserve existing `api` export — do not remove until Collections.jsx is migrated
+export const api = {
+  ...cmsApi,
+  // TODO: reroute to Shopify Storefront API
   collections: () => request('/shop/collections'),
+  // TODO: reroute to Shopify Storefront API
   products: (params = {}) => {
     const search = new URLSearchParams(params)
     const query = search.toString() ? `?${search.toString()}` : ''

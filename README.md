@@ -6,6 +6,16 @@ UNsweet is a full-stack project with:
 
 ## Quick Start
 
+### 0) Make Targets
+From repo root:
+```bash
+make backend        # run FastAPI dev server
+make frontend       # run Vite dev server
+make test           # run backend + frontend tests
+make test-backend   # run backend tests only
+make test-frontend  # run frontend tests only
+```
+
 ### 1) Backend
 ```bash
 cd backend
@@ -27,6 +37,12 @@ npm run dev
 ```
 
 Frontend runs at `http://localhost:5173`.
+
+## Testing
+
+- Backend tests live in `backend/tests/` and run with Python `unittest`.
+- Frontend tests live in `frontend/tests/` and run with Node's built-in test runner.
+- Current baseline: 5 backend tests + 5 frontend tests.
 
 ## Project Structure
 
@@ -55,4 +71,3 @@ unsweet/
 ├── .gitignore
 └── README.md
 ```
-

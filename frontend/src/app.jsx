@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/creators"       element={<Creators />} />
         <Route path="/asset/:id"       element={<AssetPage />} />
         <Route path="/creators/:slug" element={<ArtistDetail />} />
-        <Route path="/collections"    element={<Collections />} />
+        <Route path="/collections"    element={<Collections />} /> {/* HYDROGEN MIGRATION TARGET — move to Hydrogen storefront when ready */}
         <Route path="*"               element={<div className="not-found">404 — Not found.</div>} />
       </Routes>
       <Footer />
