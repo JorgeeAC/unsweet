@@ -1,0 +1,66 @@
+{
+  "artists": [
+    {
+      "id": "1",
+      "slug": "nova-reyes",
+      "name": "Nova Reyes",
+      "bio": "Visual artist working at the intersection of diaspora and digital memory.",
+      "location": "Los Angeles, CA",
+      "avatar_url": "/media/artists/nova-avatar.jpg",
+      "cover_url": "/media/artists/nova-cover.jpg",
+      "disciplines": ["photography", "mixed media"],
+      "links": [
+        { "platform": "instagram", "url": "https://instagram.com" },
+        { "platform": "website", "url": "https://example.com" }
+      ],
+      "featured": true
+    },
+    {
+      "id": "2",
+      "slug": "echo-park",
+      "name": "Echo Park",
+      "bio": "Sound designer and visual poet obsessed with urban decay and renewal.",
+      "location": "Brooklyn, NY",
+      "avatar_url": "/media/artists/echo-avatar.jpg",
+      "cover_url": "/media/artists/echo-cover.jpg",
+      "disciplines": ["sound", "video"],
+      "links": [
+        { "platform": "soundcloud", "url": "https://soundcloud.com" }
+      ],
+      "featured": true
+    },
+    {
+      "id": "3",
+      "slug": "soleil-d",
+      "name": "Soleil D.",
+      "bio": "Textile artist and muralist exploring identity through texture and scale.",
+      "location": "New Orleans, LA",
+      "avatar_url": "/media/artists/soleil-avatar.jpg",
+      "cover_url": "/media/artists/soleil-cover.jpg",
+      "disciplines": ["textile", "mural", "design"],
+      "links": [],
+      "featured": false
+    }
+  ],
+  "artist_details": {
+    "nova-reyes": {
+      "statement": "My practice is an act of remembering for those who were not allowed to.",
+      "process_notes": "I shoot on film first, then digitally manipulate to introduce artifacts of memory.",
+      "selected_work_ids": ["p1"],
+      "palette": ["#1a1a1a", "#c8b8a2", "#8b7355"],
+      "layout_variant": "editorial"
+    },
+    "echo-park": {
+      "statement": "Sound is the architecture of the invisible city.",
+      "process_notes": "Field recordings, synthesis, and found footage collapsed into single experiences.",
+      "selected_work_ids": ["p2"],
+      "palette": ["#0d0d0d", "#a0a0a0", "#3d3d3d"],
+      "layout_variant": "cinematic"
+    },
+    "soleil-d": {
+      "statement": "Fabric remembers the body that wore it.",
+      "selected_work_ids": ["p3"],
+      "layout_variant": "grid"
+    }
+  }
+}

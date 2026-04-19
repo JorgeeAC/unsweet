@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
+import InteractiveBackground from './components/InteractiveBackground'
 import Home from './pages/Home'
 import Creators from './pages/Creators'
 import ArtistDetail from './pages/ArtistDetail'
@@ -11,6 +12,7 @@ import AssetPage from './pages/AssetPage'
 export default function App() {
   return (
     <>
+      <InteractiveBackground />
       <Nav />
       <Routes>
         <Route path="/"               element={<Home />} />

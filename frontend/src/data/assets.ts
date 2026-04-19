@@ -4,7 +4,6 @@ export type Asset = {
   creator: string;
   thumbnailUrl: string;
   description?: string;
-  href?: string;
 };
 
 export const mockAssets: Asset[] = [
