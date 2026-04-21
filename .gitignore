@@ -38,3 +38,6 @@ coverage/
 .env.local
 .env.*.local
 
+
+#Junk
+hydrogen-quickstart/
